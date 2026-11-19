@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef } from "react";
 
+import { MASCOT_IMAGE, materialImageSrc } from "../domain/materialImage";
 import {
   useCurrentID,
   useDarkmoonActions,
@@ -46,7 +47,7 @@ export function MaterialList() {
       <h2 className="flex shrink-0 items-end justify-between border-b-2 border-c9 p-[5px] text-[14px] font-semibold">
         材料一览
         <img
-          src="img/kirara2.webp"
+          src={MASCOT_IMAGE.list}
           alt=""
           className="translate-y-[15%] w-[40px]"
         />
@@ -148,7 +149,7 @@ export function MaterialList() {
                 {[2, 1, 0].map((index) => (
                   <Fragment key={index}>
                     <img
-                      src={`img/${row.id}-${index}.webp`}
+                      src={materialImageSrc(row.keys[index])}
                       alt={row.names[index]}
                       width={40}
                       height={40}

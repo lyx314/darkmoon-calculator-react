@@ -7,6 +7,7 @@ import {
   IoRemoveCircleOutline,
 } from "react-icons/io5";
 
+import { materialImageSrc } from "../domain/materialImage";
 import {
   useCurrentMaterial,
   useDarkmoonActions,
@@ -100,7 +101,7 @@ export function MaterialPanel() {
           <div key={index} className="flex flex-col items-center gap-[6px]">
             <div className="overflow-hidden rounded-full bg-white shadow-[inset_0_0_4px_rgba(0,0,0,0.2)]">
               <img
-                src={`img/${currentMaterial.id}-${index}.webp`}
+                src={materialImageSrc(currentMaterial.keys[index])}
                 alt={names[index]}
                 className="w-[80px] transition-transform duration-300 hover:scale-110"
               />

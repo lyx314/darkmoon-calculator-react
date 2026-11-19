@@ -2,6 +2,7 @@ import { IoAddCircleOutline, IoCloseCircleOutline } from "react-icons/io5";
 
 import { createEnemyConfig } from "../data/defaults";
 import { enemyLevelRanges } from "../data/materials";
+import { materialImageSrc } from "../domain/materialImage";
 import type { EnemyConfig } from "../domain/types";
 import {
   useCurrentMaterial,
@@ -74,7 +75,7 @@ export function EnemySection() {
           {[2, 1, 0].map((index) => (
             <span key={index} className="flex items-center">
               <img
-                src={`img/${currentMaterial.id}-${index}.webp`}
+                src={materialImageSrc(currentMaterial.keys[index])}
                 alt={currentMaterial.names[index]}
                 className="ml-[8px] w-[20px]"
               />

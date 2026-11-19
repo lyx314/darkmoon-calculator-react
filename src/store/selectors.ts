@@ -25,6 +25,7 @@ import { useDarkmoonStore } from "./useDarkmoonStore";
 export interface ListRow {
   id: number;
   names: Triplet<string>;
+  keys: Triplet<string>;
   numbers: Triplet<number>;
   progress: number;
   hidden: boolean;
@@ -158,6 +159,7 @@ export function useListRows(): ListRow[] {
       return {
         id: material.id,
         names: material.names,
+        keys: material.keys,
         numbers,
         progress: percent,
         hidden: listOptions.hideCompleted && percent === 100,

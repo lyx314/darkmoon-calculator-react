@@ -52,6 +52,7 @@ src/
 │   ├── calculator.ts       合成模拟器 + 进度/权重公式（移植自原版 calculator.js）
 │   ├── ordering.ts         材料排序 / 上一个下一个的切换顺序
 │   ├── craftMode.ts        合成加成角色的三选一转换
+│   ├── materialImage.ts    物品 key -> 图片路径（kebab-case）
 │   └── themes.ts           13 套配色主题清单
 ├── data/
 │   ├── materials.ts        53 种材料 / 82 种敌人（由脚本从原版数据生成）
@@ -222,11 +223,18 @@ node scripts/extract-data.mjs     # 从 ../Darkmoon-Calculator/scripts/data 提�
 node scripts/gen-data.mjs         # 生成 src/data/materials.ts
 ```
 
-新增材料时把对应图片（`<id>-0` / `<id>-1` / `<id>-2`）放进 `public/img/`，然后压缩成 WebP：
+图片放在 `public/img/materials/`，文件名是物品 key 的 kebab-case 形式
+（`SlimeCondensate` → `slime-condensate.webp`），低/中/高阶分别对应 `keys[0/1/2]`。
+用 key 而不是 `材料id-品阶`，一是文件名自带语义，二是数据里 id 或顺序调整时图片不会错位。
+
+新增材料时把图按 `<kebab-key>.webp` 命名放进去，或用脚本批量压缩命名：
 
 ```bash
-python scripts/optimize-images.py   # 统一缩到 160px、质量 82，已存在同名 .webp 的会跳过
+python scripts/optimize-images.py          # 统一缩到 160px、质量 82
+python scripts/rename-material-images.py   # 按 key 改名并归到 img/materials/
 ```
+
+`tests/images.test.ts` 会校验「每种材料都有图」「没有多余图片」，改数据忘了补图会直接测试失败。
 
 ---
 
@@ -326,6 +334,18 @@ Windows 上编辑器写临时文件时被文件监视器锁住。`vite.config.ts
 - 真正的解法是压素材：`scripts/optimize-images.py` 统一缩到 160px、质量 82 转 WebP，
   `public/img` 从 **2717 KB 降到 851 KB**（省 69%），首屏图片传输 **2635 KB → 887 KB**（省 66%）。
 - 所有 `<img>` 同时补了 `width`/`height`，避免懒加载过程中行高塌陷。
+
+### 2026-11-20 · 素材改成按物品 key 命名
+
+- 原来叫 `1-0.webp` / `1-1.webp`：数字既看不出是什么材料，也看不出哪个是高阶，
+  而且和数组下标耦合。改成 `img/materials/slime-condensate.webp` 这种名字，
+  直接取自数据里已有的物品 `keys`（GOOD 导入用的同一套 key，159 个全部唯一）。
+- 吉祥物也改成带用途的名字：`kirara-title` / `kirara-list` / `kirara-favicon`，
+  并删掉没人用的 `kirara4`。
+- 路径统一由 `domain/materialImage.ts` 的 `materialImageSrc(key)` 生成，
+  组件里不再手写字符串拼接。
+- 新增 `tests/images.test.ts`：校验每种材料三个品阶都有图、`materials/` 里没有多余文件、
+  文件名确实是 kebab-case，防止以后改数据忘了补图。
 
 ### 2026-11-20 · 材料一览高亮当前材料
 

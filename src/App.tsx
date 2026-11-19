@@ -5,6 +5,7 @@ import { EnemySection } from "./components/EnemySection";
 import { MaterialList } from "./components/MaterialList";
 import { MaterialPanel } from "./components/MaterialPanel";
 import { NavBar } from "./components/NavBar";
+import { MASCOT_IMAGE } from "./domain/materialImage";
 import { useColorTheme } from "./store/selectors";
 
 export default function App() {
@@ -30,7 +31,7 @@ export default function App() {
               DARKMOON CALCULATOR
             </h1>
             <img
-              src="img/kirara1.webp"
+              src={MASCOT_IMAGE.title}
               alt="绮良良超级可爱表情包"
               className="w-[40px]"
             />
