@@ -1,0 +1,8 @@
+# 允许 esbuild 执行安装脚本（Vite 依赖它下载/链接平台二进制）
+# pnpm 11+ 使用 allowBuilds 映射表
+allowBuilds:
+  esbuild: true
+
+# pnpm 10 及更早版本使用 onlyBuiltDependencies 列表
+onlyBuiltDependencies:
+  - esbuild
