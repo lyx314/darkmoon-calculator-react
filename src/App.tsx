@@ -26,13 +26,13 @@ export default function App() {
       <NavBar />
 
       <main className="mx-auto flex min-h-0 w-full max-w-[920px] flex-col gap-[16px] px-[10px] pb-[20px] min-[860px]:flex-1 min-[860px]:flex-row min-[860px]:pb-[10px]">
-        {/* 左：录入与统计，宽屏下自己滚动（隐藏滚动条，靠滚轮/键盘滚动） */}
-        <div className="scroll-hidden min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0 min-[860px]:overflow-y-auto min-[860px]:pr-[6px]">
+        {/* 左：录入与统计。宽屏下与右侧同构：表头固定，只有下面的内容滚 */}
+        <div className="flex min-w-0 flex-col min-[860px]:min-h-0 min-[860px]:w-[430px] min-[860px]:shrink-0">
           {/*
             表头结构与右侧「材料一览」的 h2 保持一致（同样的内边距、下划线、40px 图标），
             这样两侧的下划线在同一条水平线上，下面的面板和列表也从同一 Y 开始。
           */}
-          <header className="flex items-end justify-between border-b-2 border-c9 p-[5px]">
+          <header className="flex shrink-0 items-end justify-between border-b-2 border-c9 p-[5px]">
             <h1 className="text-[13px] font-semibold">DARKMOON CALCULATOR</h1>
             <img
               src={MASCOT_IMAGE.title}
@@ -41,9 +41,12 @@ export default function App() {
             />
           </header>
 
-          <MaterialPanel />
-          <EnemySection />
-          <CraftSection />
+          {/* 滚动条隐藏，靠滚轮 / 触控板 / 键盘滚动 */}
+          <div className="scroll-hidden min-h-0 min-[860px]:flex-1 min-[860px]:overflow-y-auto min-[860px]:pr-[6px]">
+            <MaterialPanel />
+            <EnemySection />
+            <CraftSection />
+          </div>
         </div>
 
         {/* 右：材料一览，宽屏下自己滚动 */}
