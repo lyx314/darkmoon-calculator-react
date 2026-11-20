@@ -133,12 +133,6 @@ export function CraftSection() {
         overflow={craftStats.overflow[1]}
         onCraft={() => handleCraft(0)}
       />
-
-      {craftStats.risky && (
-        <p className="col-span-2 text-center text-[10px]">
-          当前材料数量有溢出风险，请谨慎合成！
-        </p>
-      )}
     </section>
   );
 }

@@ -118,8 +118,6 @@ export interface CraftStatsResult {
   complete: [number, number];
   /** 「溢出」[低阶占位, 中阶, 高阶] */
   overflow: Triplet<number>;
-  /** 材料数量是否存在溢出风险 */
-  risky: boolean;
 }
 
 /**
@@ -148,10 +146,7 @@ export function computeCraftStats(params: {
   const overflow = calc.overflow(sucroseBonus, doriBonus);
   const complete: [number, number] = [calc.craftCount[0], calc.craftCount[1]];
 
-  const risky =
-    Math.trunc(numbers[0] / 3) > even[0] || Math.trunc(numbers[1] / 3) > even[1];
-
-  return { even, complete, overflow, risky };
+  return { even, complete, overflow };
 }
 
 /**

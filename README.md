@@ -111,7 +111,7 @@ const { setNumberAt, stepNumber } = useDarkmoonActions();
 | 每车材料、每车进度、剩余车数 | `computeEnemyStats` | ✅ |
 | 世界等级 9 加成（Lv.105 区间 ×1.5，其余 ×1.25） | `Calculator.setEnemies` | ✅ |
 | 合成高阶 / 中阶：毕业 / 配平 / 溢出 | `computeCraftStats` | ✅ |
-| 砂糖 / 多莉 / 无 加成与溢出风险提示 | `CraftSection` | ✅ |
+| 砂糖 / 多莉 / 无 合成加成 | `CraftSection` | ✅ |
 | 材料一览：背包顺序 / 进度排序 + 升序降序 + 隐藏毕业 | `MaterialList` | ✅ |
 | 点击清单行切换材料并回到顶部 | `selectMaterial` | ✅ |
 | 13 套配色主题 | `data-theme` + Tailwind `@theme inline` | ✅ |
@@ -415,6 +415,12 @@ Windows 上编辑器写临时文件时被文件监视器锁住。`vite.config.ts
 - 把左侧标题改成与右侧表头同构的 `<header>`（同样 5px 内边距、2px 下划线、40px 图标），
   两条下划线自然落在同一条水平线上，下面的面板和列表也从同一 Y 开始。
 - 实测：两个表头高度都是 52px、底边都在 y=96，左侧面板顶部也是 96（原来是 84）。
+
+### 2026-11-20 · 移除溢出风险提示
+
+- 删掉合成面板底部那行「当前材料数量有溢出风险，请谨慎合成！」，以及 `computeCraftStats`
+  里支撑它的 `risky` 字段（`Math.trunc(低/3) > 配平中阶 || Math.trunc(中/3) > 配平高阶`）。
+- 合成区块里的「溢 出」数值是另一回事（相对 9999 的超出量），保留不变。
 
 ### 2026-11-20 · 材料一览高亮当前材料
 
