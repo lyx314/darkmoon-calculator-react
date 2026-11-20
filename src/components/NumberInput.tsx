@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FocusEvent } from "react";
 
 import { isValidNumber } from "../domain/calculator";
 
@@ -31,8 +31,21 @@ export function NumberInput({
 
   const display = draft ?? (value === 0 ? "" : String(value));
 
-  const startEditing = () => {
+  /**
+   * 聚焦时选中已有数字。
+   *
+   * 这样点进输入框直接键入就能覆盖旧值，不用先删除；
+   * 想追加/局部修改的话，再点一下即可恢复光标定位（浏览器原生行为）。
+   */
+  const startEditing = (event: FocusEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
     setDraft(value === 0 ? "" : String(value));
+
+    // number 类型的 select() 在部分浏览器里会被忽略，放到下一帧再试一次
+    input.select();
+    requestAnimationFrame(() => {
+      if (document.activeElement === input) input.select();
+    });
   };
 
   const commit = () => {

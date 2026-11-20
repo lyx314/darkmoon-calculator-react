@@ -89,6 +89,17 @@ try {
   await highInput.blur();
   check("超过 9999 被拒绝并还原", (await highInput.inputValue()) === "123");
 
+  // 聚焦即全选：点进去直接键入就覆盖，不用先删
+  await highInput.click();
+  await page.keyboard.type("9");
+  await page.keyboard.press("Enter");
+  await page.waitForTimeout(200);
+  check("聚焦时自动全选，可直接覆盖原值", (await highInput.inputValue()) === "9");
+
+  await highInput.fill("123");
+  await highInput.blur();
+  await page.waitForTimeout(200);
+
   console.log("\n[4] 敌人配置 -> 每车 / 剩余车数");
   const enemyNumber = page.getByLabel("敌人数量").first();
   await enemyNumber.fill("10");
