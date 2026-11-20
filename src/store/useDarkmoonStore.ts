@@ -1,14 +1,16 @@
 import { create } from "zustand";
 
 import { DEFAULT_DATA, ZERO_NUMBERS } from "../data/defaults";
+import { progress } from "../domain/calculator";
 import { craftOptionsOf } from "../domain/craftMode";
-import { NAV_ORDER, getMaterial } from "../domain/ordering";
+import { getMaterial, numbersOf, orderMaterials } from "../domain/ordering";
 import type {
   ColorTheme,
   CraftMode,
   DarkmoonData,
   EnemyConfig,
   ListOptions,
+  Material,
   MaterialRecord,
   Triplet,
 } from "../domain/types";
@@ -51,6 +53,21 @@ function withRecord(
       ? data.materialsNumbers.map((item) => (item.id === id ? next : item))
       : [...data.materialsNumbers, next],
   };
+}
+
+/**
+ * 「上一个 / 下一个」的切换顺序 = 右侧材料一览当前显示的顺序。
+ *
+ * 跟着列表的排序选项走（背包顺序 / 进度排序、升序 / 降序）；
+ * 开了「隐藏毕业」时也跳过已毕业的材料，避免切到一个列表里看不到的条目。
+ */
+export function visibleOrder(data: DarkmoonData): Material[] {
+  const ordered = orderMaterials(data.materialsNumbers, data.listOptions);
+  if (!data.listOptions.hideCompleted) return ordered;
+
+  return ordered.filter(
+    (material) => progress(...numbersOf(data.materialsNumbers, material.id)) !== 100,
+  );
 }
 
 export const useDarkmoonStore = create<DarkmoonStore>((set, get) => ({
@@ -99,17 +116,22 @@ export const useDarkmoonStore = create<DarkmoonStore>((set, get) => ({
   },
 
   goPrevMaterial: () => {
-    const { currentID } = get().data;
-    const index = NAV_ORDER.findIndex((item) => item.id === currentID);
-    const prev = index > 0 ? index - 1 : NAV_ORDER.length - 1;
-    get().selectMaterial(NAV_ORDER[prev].id);
+    const order = visibleOrder(get().data);
+    if (order.length === 0) return;
+
+    const index = order.findIndex((item) => item.id === get().data.currentID);
+    // index === -1 说明当前材料不在可见顺序里（比如被「隐藏毕业」过滤掉），从末尾开始
+    const prev = index === -1 ? order.length - 1 : (index - 1 + order.length) % order.length;
+    get().selectMaterial(order[prev].id);
   },
 
   goNextMaterial: () => {
-    const { currentID } = get().data;
-    const index = NAV_ORDER.findIndex((item) => item.id === currentID);
-    const next = index < NAV_ORDER.length - 1 ? index + 1 : 0;
-    get().selectMaterial(NAV_ORDER[next].id);
+    const order = visibleOrder(get().data);
+    if (order.length === 0) return;
+
+    const index = order.findIndex((item) => item.id === get().data.currentID);
+    const next = index === -1 ? 0 : (index + 1) % order.length;
+    get().selectMaterial(order[next].id);
   },
 
   lockCurrentNumbers: () =>
@@ -169,8 +191,7 @@ export const useDarkmoonStore = create<DarkmoonStore>((set, get) => ({
   },
 }));
 
-/** 当前材料已填写的数量（内部工具） */
-export function getCurrentNumbers(data: DarkmoonData): {
+/** 当前材料已填写的数量（内部工具） */export function getCurrentNumbers(data: DarkmoonData): {
   numbers: Triplet<number>;
   lock: Triplet<number> | null;
   material: ReturnType<typeof getMaterial>;

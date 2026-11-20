@@ -177,7 +177,37 @@ try {
       (await page.locator('[data-testid="list-row"][data-current="true"]').count()) === 1,
   );
 
-  console.log("\n[10] 清单内直接输入数量");
+  console.log("\n[10] 上一个 / 下一个跟随清单顺序");
+  const rowIndexOfCurrent = () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll('[data-testid="list-row"]')].findIndex(
+        (row) => row.getAttribute("data-current") === "true",
+      ),
+    );
+
+  await page.getByLabel("降序").check();
+  await page.waitForTimeout(300);
+  const navFrom = await rowIndexOfCurrent();
+  await page.getByLabel("下一个材料").click();
+  await page.waitForTimeout(300);
+  check(
+    `「下一个」按列表顺序前进（${navFrom} -> ${await rowIndexOfCurrent()}）`,
+    (await rowIndexOfCurrent()) === navFrom + 1,
+  );
+
+  const navBack = await rowIndexOfCurrent();
+  await page.getByLabel("上一个材料").click();
+  await page.waitForTimeout(300);
+  check(
+    `「上一个」按列表顺序后退（${navBack} -> ${await rowIndexOfCurrent()}）`,
+    (await rowIndexOfCurrent()) === navBack - 1,
+  );
+
+  // 回到背包顺序，避免影响后面的用例
+  await page.getByLabel("背包顺序").check();
+  await page.waitForTimeout(200);
+
+  console.log("\n[11] 清单内直接输入数量");
   // 特意选一个“不是当前材料”的行，验证两处输入互不干扰
   const otherRow = page.locator('[data-testid="list-row"]').nth(3);
   const otherInput = otherRow.locator("input").first();
@@ -203,7 +233,7 @@ try {
   await otherInput.blur();
   await page.waitForTimeout(300);
 
-  console.log("\n[11] 清除数据");
+  console.log("\n[12] 清除数据");
   page.once("dialog", (dialog) => dialog.accept());
   await page.getByRole("button", { name: "清除" }).click();
   check(
@@ -211,7 +241,7 @@ try {
     (await page.getByTestId("progress-value").innerText()) === "0%",
   );
 
-  console.log("\n[12] 控制台错误");
+  console.log("\n[13] 控制台错误");
   check("无 JS 运行时错误", consoleErrors.length === 0, consoleErrors.join(" | "));
 } finally {
   await browser.close();

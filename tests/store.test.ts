@@ -2,8 +2,12 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { DEFAULT_DATA } from "../src/data/defaults";
 import { materials } from "../src/data/materials";
-import { NAV_ORDER, getMaterial } from "../src/domain/ordering";
-import { getCurrentNumbers, useDarkmoonStore } from "../src/store/useDarkmoonStore";
+import { getMaterial } from "../src/domain/ordering";
+import {
+  getCurrentNumbers,
+  useDarkmoonStore,
+  visibleOrder,
+} from "../src/store/useDarkmoonStore";
 
 /** 每个用例前把 store 重置成默认状态 */
 function reset() {
@@ -64,29 +68,70 @@ describe("zustand store 行为", () => {
     // selectMaterial 会滚动页面，jsdom 里是空实现，不影响断言
   });
 
-  it("上一个 / 下一个材料按「精英在前、id 升序」循环", () => {
-    const first = NAV_ORDER[0];
-    const second = NAV_ORDER[1];
-    const last = NAV_ORDER[NAV_ORDER.length - 1];
+  it("上一个 / 下一个跟随清单顺序：默认背包顺序，末尾绕回开头", () => {
+    const order = visibleOrder(store().data);
+    // 默认「背包顺序 + 升序」= 精英在前、id 升序
+    expect(order[0].type).toBe("elite");
+    expect(order[0].id).toBe(5);
+    expect(order[order.length - 1].type).toBe("common");
 
-    // 排序规则：精英材料全部排在普通材料之前
-    expect(first.type).toBe("elite");
-    expect(last.type).toBe("common");
-
-    store().selectMaterial(first.id);
+    store().selectMaterial(order[0].id);
     store().goNextMaterial();
-    expect(store().data.currentID).toBe(second.id);
+    expect(store().data.currentID).toBe(order[1].id);
 
     store().goPrevMaterial();
-    expect(store().data.currentID).toBe(first.id);
+    expect(store().data.currentID).toBe(order[0].id);
 
-    // 末尾继续往后会绕回第一个
-    store().selectMaterial(last.id);
+    // 走到最后一个继续往后，绕回第一个
+    store().selectMaterial(order[order.length - 1].id);
     store().goNextMaterial();
-    expect(store().data.currentID).toBe(first.id);
+    expect(store().data.currentID).toBe(order[0].id);
 
+    // 从第一个往前，绕到最后一个
     store().goPrevMaterial();
-    expect(store().data.currentID).toBe(last.id);
+    expect(store().data.currentID).toBe(order[order.length - 1].id);
+  });
+
+  it("切成降序后，切换顺序跟着列表反过来", () => {
+    const asc = visibleOrder(store().data).map((item) => item.id);
+
+    store().setListOptions({ orderAscending: false, orderDescending: true });
+    const desc = visibleOrder(store().data).map((item) => item.id);
+    expect(desc).toEqual([...asc].reverse());
+
+    store().selectMaterial(desc[0]);
+    store().goNextMaterial();
+    expect(store().data.currentID).toBe(desc[1]);
+  });
+
+  it("按进度排序时，切换顺序与列表一致", () => {
+    // 让 id 7 的进度最高，它应该排在进度降序的第一位
+    store().setNumbersFor(7, [9999, 9999, 9999]);
+    store().setNumbersFor(9, [100, 0, 0]);
+    store().setListOptions({ sortID: false, sortProgress: true, orderDescending: true });
+
+    const order = visibleOrder(store().data).map((item) => item.id);
+    expect(order[0]).toBe(7);
+
+    store().selectMaterial(order[0]);
+    store().goNextMaterial();
+    expect(store().data.currentID).toBe(order[1]);
+  });
+
+  it("开启「隐藏毕业」后，切换会跳过已毕业材料", () => {
+    const before = visibleOrder(store().data);
+    const graduatedId = before[0].id;
+
+    store().setNumbersFor(graduatedId, [9999, 9999, 9999]);
+    store().setListOptions({ hideCompleted: true });
+
+    const visible = visibleOrder(store().data).map((item) => item.id);
+    expect(visible).not.toContain(graduatedId);
+
+    // 当前停在被隐藏的材料上时，往后切会落到第一个可见材料
+    store().selectMaterial(graduatedId);
+    store().goNextMaterial();
+    expect(store().data.currentID).toBe(visible[0]);
   });
 
   it("敌人配置按材料 id 分组保存", () => {

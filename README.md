@@ -105,7 +105,7 @@ const { setNumberAt, stepNumber } = useDarkmoonActions();
 | --- | --- | --- |
 | 三种品阶材料数量输入（0 ~ 9999 校验） | `NumberInput` + `setNumberAt` | ✅ |
 | 加减按钮、进度百分比与进度条 | `MaterialPanel` | ✅ |
-| 上一个 / 下一个材料切换（精英优先、按 id 升序） | `goPrevMaterial` / `goNextMaterial` | ✅ |
+| 上一个 / 下一个材料切换（跟随清单顺序，首尾循环） | `goPrevMaterial` / `goNextMaterial` | ✅ |
 | 锁定初始数量 → 计算「新增车数」 | `lockCurrentNumbers` | ✅ |
 | 敌人配置（敌人 / 等级区间 / 数量 / 启用勾选 / 删除 / 新增） | `EnemySection` | ✅ |
 | 每车材料、每车进度、剩余车数 | `computeEnemyStats` | ✅ |
@@ -391,6 +391,15 @@ Windows 上编辑器写临时文件时被文件监视器锁住。`vite.config.ts
 - `number` 类型的输入框在部分浏览器里会忽略 `select()`，所以补了一次
   `requestAnimationFrame` 重试（下一帧确认仍然聚焦才选）。
 - 顶部面板和材料一览共用 `NumberInput`，两处行为一致。
+
+### 2026-11-20 · 上一个 / 下一个跟随清单顺序
+
+- 之前固定在「精英在前、id 升序」的顺序里切换，和右侧列表的排序无关：把列表切成降序后，
+  点「下一个」会跳到列表里完全不相邻的位置。
+- 改成跟随列表当前顺序（背包顺序 / 进度排序 × 升序 / 降序），首尾循环。
+- 开启「隐藏毕业」时也跳过已毕业材料 —— 否则会切到一个列表里根本看不见的条目；
+  当前材料恰好被隐藏时，往后切落到第一个可见项。
+- 实现放在 `store` 的 `visibleOrder(data)` 里，导航和列表用同一套排序逻辑，不会各算一遍。
 
 ### 2026-11-20 · 材料一览高亮当前材料
 

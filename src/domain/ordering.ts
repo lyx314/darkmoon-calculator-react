@@ -12,13 +12,6 @@ export function sortMaterialsByID(desc: boolean): Material[] {
   return desc ? [...common, ...elite] : [...elite, ...common];
 }
 
-/**
- * 上一个 / 下一个材料的切换顺序。
- *
- * 原版固定按「精英在前、id 升序」切换，与清单的排序选项无关。
- */
-export const NAV_ORDER: Material[] = sortMaterialsByID(false);
-
 export function getMaterial(id: number): Material {
   return materials.find((item) => item.id === id) ?? materials[0];
 }
