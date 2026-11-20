@@ -28,16 +28,18 @@ export default function App() {
       <main className="mx-auto flex min-h-0 w-full max-w-[920px] flex-col gap-[16px] px-[10px] pb-[20px] min-[860px]:flex-1 min-[860px]:flex-row min-[860px]:pb-[10px]">
         {/* 左：录入与统计，宽屏下自己滚动（隐藏滚动条，靠滚轮/键盘滚动） */}
         <div className="scroll-hidden min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0 min-[860px]:overflow-y-auto min-[860px]:pr-[6px]">
-          <div className="flex items-end justify-between">
-            <h1 className="my-[10px] mr-[10px] text-[13px] font-semibold">
-              DARKMOON CALCULATOR
-            </h1>
+          {/*
+            表头结构与右侧「材料一览」的 h2 保持一致（同样的内边距、下划线、40px 图标），
+            这样两侧的下划线在同一条水平线上，下面的面板和列表也从同一 Y 开始。
+          */}
+          <header className="flex items-end justify-between border-b-2 border-c9 p-[5px]">
+            <h1 className="text-[13px] font-semibold">DARKMOON CALCULATOR</h1>
             <img
               src={MASCOT_IMAGE.title}
               alt="绮良良超级可爱表情包"
-              className="w-[40px]"
+              className="w-[40px] translate-y-[15%]"
             />
-          </div>
+          </header>
 
           <MaterialPanel />
           <EnemySection />
