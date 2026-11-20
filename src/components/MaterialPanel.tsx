@@ -85,7 +85,7 @@ export function MaterialPanel() {
 
       <p
         data-testid="progress-value"
-        className="text-center text-[20px] font-semibold text-c8"
+        className="text-center text-[22px] font-semibold text-c8"
       >
         {progressValue}%
       </p>
@@ -107,13 +107,13 @@ export function MaterialPanel() {
               />
             </div>
 
-            <span className="text-[10px] font-semibold">{names[index]}</span>
+            <span className="text-[11px] font-semibold">{names[index]}</span>
 
             <NumberInput
               value={numbers[index]}
               onCommit={(value) => setNumberAt(index, value)}
               ariaLabel={`${names[index]} 数量`}
-              className="w-[80px] rounded-full border-none py-[2px] text-center text-[12px] font-semibold text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none"
+              className="w-[80px] rounded-full border-none py-[2px] text-center text-[13px] font-semibold text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none"
             />
 
             <div className="flex w-[80px] items-center justify-between">
@@ -126,7 +126,7 @@ export function MaterialPanel() {
                 <IoRemoveCircleOutline size={20} />
               </button>
 
-              <span className="text-[10px]">
+              <span className="text-[11px]">
                 {locked && lockNumbers ? lockNumbers[index] : ""}
               </span>
 

@@ -44,7 +44,7 @@ export function MaterialList() {
 
   return (
     <section className="my-[20px] flex min-h-0 flex-col min-[860px]:my-0 min-[860px]:h-full">
-      <h2 className="flex shrink-0 items-end justify-between border-b-2 border-c9 p-[5px] text-[14px] font-semibold">
+      <h2 className="flex shrink-0 items-end justify-between border-b-2 border-c9 p-[5px] text-[15px] font-semibold">
         材料一览
         <img
           src={MASCOT_IMAGE.list}
@@ -64,7 +64,7 @@ export function MaterialList() {
           }
           className="ml-[8px] accent-c9"
         />
-        <label htmlFor="list-sort-id" className="ml-[2px] text-[10px]">
+        <label htmlFor="list-sort-id" className="ml-[2px] text-[11px]">
           背包顺序
         </label>
 
@@ -78,7 +78,7 @@ export function MaterialList() {
           }
           className="ml-[8px] accent-c9"
         />
-        <label htmlFor="list-sort-progress" className="ml-[2px] text-[10px]">
+        <label htmlFor="list-sort-progress" className="ml-[2px] text-[11px]">
           进度排序
         </label>
 
@@ -92,7 +92,7 @@ export function MaterialList() {
           }
           className="ml-[8px] accent-c9"
         />
-        <label htmlFor="list-order-ascending" className="ml-[2px] text-[10px]">
+        <label htmlFor="list-order-ascending" className="ml-[2px] text-[11px]">
           升序
         </label>
 
@@ -106,7 +106,7 @@ export function MaterialList() {
           }
           className="ml-[8px] accent-c9"
         />
-        <label htmlFor="list-order-descending" className="ml-[2px] text-[10px]">
+        <label htmlFor="list-order-descending" className="ml-[2px] text-[11px]">
           降序
         </label>
 
@@ -119,7 +119,7 @@ export function MaterialList() {
           }
           className="ml-[8px] accent-c9"
         />
-        <label htmlFor="hide-completed" className="ml-[2px] text-[10px]">
+        <label htmlFor="hide-completed" className="ml-[2px] text-[11px]">
           隐藏毕业
         </label>
       </div>
@@ -157,7 +157,7 @@ export function MaterialList() {
                       decoding="async"
                       className="h-[40px] w-[40px]"
                     />
-                    <span className="w-[35px] text-center text-[10px]">
+                    <span className="w-[35px] text-center text-[11px]">
                       {row.numbers[index]}
                     </span>
                   </Fragment>
@@ -172,7 +172,7 @@ export function MaterialList() {
                   label={`${row.names[2]} 毕业进度`}
                   className="max-w-[110px] min-w-[56px] flex-1"
                 />
-                <span className="w-[42px] shrink-0 text-right text-[10px]">
+                <span className="w-[42px] shrink-0 text-right text-[11px]">
                   {row.progress}%
                 </span>
               </span>

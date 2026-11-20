@@ -244,6 +244,11 @@ python scripts/rename-material-images.py   # 按 key 改名并归到 img/materia
   已用 `useMemo` 保证只在真正相关状态变化时才重算。
 - 未引入 ESLint / Prettier，保持依赖精简；如需可自行添加。
 - 原生弹窗样式不可定制，换成自绘弹窗会改变操作手感，故暂未替换。
+- **尺寸全部用 px，不用 Tailwind 的 rem 标度**：这套版式是从原版 `font-size: 62.5%` 的设计
+  逐个换算下来的，px 能保证像素级一致。标度类（如 `w-17`）实际是
+  `calc(var(--spacing) * 17)` = 4.25rem，只有根字号 16px 时才等于 68px；混用会让
+  「部分尺寸随浏览器字号缩放、部分不变」，紧凑布局立刻错位。
+  所以 IntelliSense 的 `suggestCanonicalClasses` 提示（"可以写成 w-17"）是**有意忽略**的。
 
 ## 常见问题
 
@@ -346,6 +351,15 @@ Windows 上编辑器写临时文件时被文件监视器锁住。`vite.config.ts
   组件里不再手写字符串拼接。
 - 新增 `tests/images.test.ts`：校验每种材料三个品阶都有图、`materials/` 里没有多余文件、
   文件名确实是 kebab-case，防止以后改数据忘了补图。
+
+### 2026-11-20 · 整体上调字号
+
+- 正文 10px → **11px**（15 处）、溢出提示 8px → 10px、合成小标题 11 → 12、
+  导航与页面标题 12 → 13、一览标题 14 → 15、进度大数字 20 → 22。
+- 只动字号不动盒子，改完用脚本扫了一遍所有 `button/select/input/span`，
+  确认没有元素出现 `scrollWidth > clientWidth` 的文字溢出。
+- 顺带修了文档截图脚本：`loading="lazy"` 的图片在整页截图时不会被触发加载，
+  现在截图前强制改成 `eager` 并等所有图片 `complete`，否则移动端长图下半截全是空格子。
 
 ### 2026-11-20 · 材料一览高亮当前材料
 

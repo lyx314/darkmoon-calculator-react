@@ -27,7 +27,7 @@ export default function App() {
       <main className="mx-auto flex max-w-[920px] flex-col gap-[16px] px-[10px] pb-[20px] min-[860px]:flex-row min-[860px]:items-start">
         <div className="min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0">
           <div className="flex items-end justify-between">
-            <h1 className="my-[10px] mr-[10px] text-[12px] font-semibold">
+            <h1 className="my-[10px] mr-[10px] text-[13px] font-semibold">
               DARKMOON CALCULATOR
             </h1>
             <img

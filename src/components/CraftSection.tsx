@@ -35,11 +35,11 @@ function CraftBlock({
 }: CraftBlockProps) {
   return (
     <div className="flex flex-col items-center gap-[10px] overflow-hidden rounded-[10px] bg-c0 pb-[5px] shadow-[inset_0_0_2px_rgba(0,0,0,0.2)]">
-      <h3 className="w-full bg-c6 p-[8px] text-center text-[11px] font-semibold text-white">
+      <h3 className="w-full bg-c6 p-[8px] text-center text-[12px] font-semibold text-white">
         {title}
       </h3>
 
-      <div className="grid grid-cols-2 gap-x-[15px] gap-y-[10px] text-[10px] font-semibold">
+      <div className="grid grid-cols-2 gap-x-[15px] gap-y-[10px] text-[11px] font-semibold">
         <span>毕 业</span>
         <span data-testid={`${testId}-complete`}>{complete}</span>
         <span>配 平</span>
@@ -97,7 +97,7 @@ export function CraftSection() {
 
   return (
     <section className="my-[10px] grid grid-cols-2 gap-x-[10px] gap-y-[10px] rounded-[10px] bg-c1 p-[10px] shadow-[0_0_5px_rgba(0,0,0,0.2)]">
-      <div className="col-span-2 flex items-center justify-center text-[10px] font-semibold">
+      <div className="col-span-2 flex items-center justify-center text-[11px] font-semibold">
         {CRAFT_MODES.map((mode) => (
           <span key={mode.value} className="flex items-center">
             <input
@@ -135,7 +135,7 @@ export function CraftSection() {
       />
 
       {craftStats.risky && (
-        <p className="col-span-2 text-center text-[8px]">
+        <p className="col-span-2 text-center text-[10px]">
           当前材料数量有溢出风险，请谨慎合成！
         </p>
       )}

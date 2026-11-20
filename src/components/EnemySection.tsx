@@ -14,7 +14,7 @@ import { NumberInput } from "./NumberInput";
 import { iconButton } from "./ui/buttonStyles";
 
 const selectClass =
-  "w-[100px] cursor-pointer rounded-full border-none p-[4px] text-center text-[10px] text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none max-sm:w-[80px]";
+  "w-[100px] cursor-pointer rounded-full border-none p-[4px] text-center text-[11px] text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none max-sm:w-[80px]";
 
 /** 敌人配置区域：每车材料统计 + 敌人/等级/数量配置行 */
 export function EnemySection() {
@@ -51,7 +51,7 @@ export function EnemySection() {
 
   return (
     <section className="my-[10px] rounded-[10px] bg-c1 p-[10px] shadow-[0_0_5px_rgba(0,0,0,0.2)]">
-      <div className="mb-[10px] flex flex-col gap-[10px] rounded-[10px] bg-c0 p-[10px] text-[10px] font-semibold shadow-[inset_0_0_2px_rgba(0,0,0,0.2)]">
+      <div className="mb-[10px] flex flex-col gap-[10px] rounded-[10px] bg-c0 p-[10px] text-[11px] font-semibold shadow-[inset_0_0_2px_rgba(0,0,0,0.2)]">
         <div>
           剩余车数
           <span data-testid="left-run-times" className="mx-[10px]">
@@ -85,7 +85,7 @@ export function EnemySection() {
         </div>
       </div>
 
-      <div className="mb-[10px] grid grid-cols-[10px_repeat(3,1fr)_20px] items-center justify-items-center text-[10px] font-semibold">
+      <div className="mb-[10px] grid grid-cols-[10px_repeat(3,1fr)_20px] items-center justify-items-center text-[11px] font-semibold">
         <div />
         <div>敌 人</div>
         <div>等 级</div>
@@ -138,7 +138,7 @@ export function EnemySection() {
               value={row.number}
               ariaLabel="敌人数量"
               onCommit={(value) => updateRow(index, { number: value })}
-              className="w-[100px] rounded-full border-none p-[4px] text-center text-[10px] text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none max-sm:w-[80px]"
+              className="w-[100px] rounded-full border-none p-[4px] text-center text-[11px] text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none max-sm:w-[80px]"
             />
 
             <button
