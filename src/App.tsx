@@ -26,8 +26,8 @@ export default function App() {
       <NavBar />
 
       <main className="mx-auto flex min-h-0 w-full max-w-[920px] flex-col gap-[16px] px-[10px] pb-[20px] min-[860px]:flex-1 min-[860px]:flex-row min-[860px]:pb-[10px]">
-        {/* 左：录入与统计，宽屏下自己滚动 */}
-        <div className="scroll-thin min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0 min-[860px]:overflow-y-auto min-[860px]:pr-[6px]">
+        {/* 左：录入与统计，宽屏下自己滚动（隐藏滚动条，靠滚轮/键盘滚动） */}
+        <div className="scroll-hidden min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0 min-[860px]:overflow-y-auto min-[860px]:pr-[6px]">
           <div className="flex items-end justify-between">
             <h1 className="my-[10px] mr-[10px] text-[13px] font-semibold">
               DARKMOON CALCULATOR
