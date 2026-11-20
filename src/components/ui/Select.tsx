@@ -15,7 +15,7 @@ const variantClass: Record<SelectVariant, string> = {
   // 与导航栏按钮同高同字号
   primary: "h-[24px] bg-c8 px-[10px] text-[10px] text-white",
   // 与敌人配置行的输入框、敌人下拉同一尺寸
-  plain: "bg-white px-[14px] py-[4px] text-[11px] text-c9",
+  plain: "h-[24px] bg-white px-[14px] text-[11px] text-c9",
 };
 
 /**

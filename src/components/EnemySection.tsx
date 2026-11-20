@@ -11,6 +11,7 @@ import {
   useEnemyStats,
 } from "../store/selectors";
 import { NumberInput } from "./NumberInput";
+import { panelField } from "./ui/fieldStyles";
 import { Select } from "./ui/Select";
 import { iconButton } from "./ui/buttonStyles";
 
@@ -136,7 +137,7 @@ export function EnemySection() {
               value={row.number}
               ariaLabel="敌人数量"
               onCommit={(value) => updateRow(index, { number: value })}
-              className="w-[100px] rounded-full border-none p-[4px] text-center text-[11px] text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none max-sm:w-[80px]"
+              className={`${panelField} w-[100px] text-[11px] max-sm:w-[80px]`}
             />
 
             <button

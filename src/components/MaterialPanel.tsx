@@ -16,6 +16,7 @@ import {
   useProgressValue,
 } from "../store/selectors";
 import { NumberInput } from "./NumberInput";
+import { panelField } from "./ui/fieldStyles";
 import { iconButton } from "./ui/buttonStyles";
 import { ProgressBar } from "./ui/ProgressBar";
 
@@ -113,7 +114,7 @@ export function MaterialPanel() {
               value={numbers[index]}
               onCommit={(value) => setNumberAt(index, value)}
               ariaLabel={`${names[index]} 数量`}
-              className="w-[80px] rounded-full border-none py-[2px] text-center text-[13px] font-semibold text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none"
+              className={`${panelField} w-[80px] text-[13px]`}
             />
 
             <div className="flex w-[80px] items-center justify-between">

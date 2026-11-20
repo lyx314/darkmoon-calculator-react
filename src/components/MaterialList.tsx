@@ -9,6 +9,7 @@ import {
   useListRows,
 } from "../store/selectors";
 import { NumberInput } from "./NumberInput";
+import { cellField } from "./ui/fieldStyles";
 import { ProgressBar } from "./ui/ProgressBar";
 
 export function MaterialList() {
@@ -178,7 +179,7 @@ export function MaterialList() {
                         next[index] = value;
                         setNumbersFor(row.id, next);
                       }}
-                      className="pointer-events-auto mx-[2px] w-[38px] rounded-[4px] border-none bg-transparent py-[2px] text-center text-[11px] text-c9 transition-colors hover:bg-c0 focus:bg-white focus:shadow-[0_0_0_1px_var(--color-6)] focus:outline-none"
+                      className={`pointer-events-auto mx-[2px] w-[38px] ${cellField}`}
                     />
                   </Fragment>
                 ))}
