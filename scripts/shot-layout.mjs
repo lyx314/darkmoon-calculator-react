@@ -17,7 +17,8 @@ async function fillDemo(page) {
     ["史莱姆清 数量", "30"],
     ["史莱姆凝液 数量", "200"],
   ]) {
-    const input = page.getByLabel(label);
+    // 清单里也有同名输入框，这里要精确匹配顶部面板那个
+    const input = page.getByLabel(label, { exact: true });
     await input.fill(value);
     await input.blur();
   }

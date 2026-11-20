@@ -19,6 +19,8 @@ export interface DarkmoonStore {
   data: DarkmoonData;
 
   setNumbers: (numbers: Triplet<number>) => void;
+  /** 直接改写指定材料的数量（材料一览里 inline 编辑用） */
+  setNumbersFor: (id: number, numbers: Triplet<number>) => void;
   setNumberAt: (index: 0 | 1 | 2, value: number) => void;
   stepNumber: (index: 0 | 1 | 2, delta: 1 | -1) => void;
   selectMaterial: (id: number) => void;
@@ -62,8 +64,7 @@ export const useDarkmoonStore = create<DarkmoonStore>((set, get) => ({
       })),
     })),
 
-  setNumberAt: (index, value) => {
-    const { numbers } = getCurrentNumbers(get().data);
+  setNumberAt: (index, value) => {    const { numbers } = getCurrentNumbers(get().data);
     const next = [...numbers] as Triplet<number>;
     next[index] = value;
     get().setNumbers(next);
@@ -79,6 +80,14 @@ export const useDarkmoonStore = create<DarkmoonStore>((set, get) => ({
     next[index] = value;
     get().setNumbers(next);
   },
+
+  setNumbersFor: (id, numbers) =>
+    set((state) => ({
+      data: withRecord(state.data, id, (record) => ({
+        ...record,
+        numbers: [...numbers] as Triplet<number>,
+      })),
+    })),
 
   selectMaterial: (id) => {
     if (get().data.currentID === id) return;

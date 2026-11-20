@@ -175,6 +175,7 @@ export function useDarkmoonActions() {
   return useDarkmoonStore(
     useShallow((state) => ({
       setNumbers: state.setNumbers,
+      setNumbersFor: state.setNumbersFor,
       setNumberAt: state.setNumberAt,
       stepNumber: state.stepNumber,
       selectMaterial: state.selectMaterial,

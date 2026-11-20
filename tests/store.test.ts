@@ -129,6 +129,30 @@ describe("zustand store 行为", () => {
     expect(store().data.craftOptions.noneBonus).toBe(true);
   });
 
+  it("setNumbersFor 直接改写指定材料，不改变当前选中", () => {
+    // 当前是 id 1，改写 id 3
+    store().setNumbersFor(3, [1, 2, 3]);
+
+    expect(store().data.currentID).toBe(1);
+    expect(getCurrentNumbers(store().data).numbers).toEqual([0, 0, 0]);
+
+    const record = store().data.materialsNumbers.find((item) => item.id === 3);
+    expect(record?.numbers).toEqual([1, 2, 3]);
+
+    // 再次改写同一条记录应覆盖而不是新增
+    store().setNumbersFor(3, [9, 9, 9]);
+    expect(store().data.materialsNumbers.filter((item) => item.id === 3)).toHaveLength(1);
+    expect(store().data.materialsNumbers.find((item) => item.id === 3)?.numbers).toEqual([9, 9, 9]);
+  });
+
+  it("未选中的材料也能被 setNumbersFor 记录（与面板输入互不干扰）", () => {
+    store().setNumberAt(0, 5); // 当前材料
+    store().setNumbersFor(2, [7, 0, 0]); // 另一个材料
+
+    expect(getCurrentNumbers(store().data).numbers).toEqual([5, 0, 0]);
+    expect(store().data.materialsNumbers.find((item) => item.id === 2)?.numbers).toEqual([7, 0, 0]);
+  });
+
   it("clearAll 恢复默认并清掉锁定记录", () => {
     store().setNumberAt(0, 99);
     store().lockCurrentNumbers();

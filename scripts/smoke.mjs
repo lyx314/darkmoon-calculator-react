@@ -62,7 +62,7 @@ try {
   );
 
   console.log("\n[2] 增减按钮 + 进度联动");
-  const highInput = page.getByLabel("史莱姆原浆 数量");
+  const highInput = page.getByLabel("史莱姆原浆 数量", { exact: true });
   await page.getByLabel("增加 史莱姆原浆").click();
   await page.getByLabel("增加 史莱姆原浆").click();
   await page.getByLabel("增加 史莱姆原浆").click();
@@ -105,7 +105,7 @@ try {
   check(`新增车数已计算（${increased}）`, increased !== "-");
 
   console.log("\n[6] 合成统计");
-  const lowInput = page.getByLabel("史莱姆凝液 数量");
+  const lowInput = page.getByLabel("史莱姆凝液 数量", { exact: true });
   await lowInput.fill("300");
   await lowInput.blur();
   const evenHigh = await page.getByTestId("craft-high-even").innerText();
@@ -135,7 +135,7 @@ try {
   );
   check(
     "刷新后数量持久化",
-    (await page.getByLabel("史莱姆原浆 数量").inputValue()) === numbersBefore,
+    (await page.getByLabel("史莱姆原浆 数量", { exact: true }).inputValue()) === numbersBefore,
   );
   check(
     "刷新后敌人配置持久化",
@@ -151,7 +151,8 @@ try {
   await page.getByLabel("背包顺序").check();
   const secondRow = page.locator('[data-testid="list-row"]').nth(1);
   const rowImageAlt = await secondRow.locator("img").first().getAttribute("alt");
-  await secondRow.click();
+  // 行内容层是 pointer-events-none，点击会落到整行的覆盖按钮上
+  await secondRow.locator("button").first().click();
   const panelImageAlt = await page
     .locator("section")
     .first()
@@ -165,7 +166,33 @@ try {
       (await page.locator('[data-testid="list-row"][data-current="true"]').count()) === 1,
   );
 
-  console.log("\n[10] 清除数据");
+  console.log("\n[10] 清单内直接输入数量");
+  // 特意选一个“不是当前材料”的行，验证两处输入互不干扰
+  const otherRow = page.locator('[data-testid="list-row"]').nth(3);
+  const otherInput = otherRow.locator("input").first();
+  const rowProgressBefore = await otherRow.locator("span").last().innerText();
+  const panelBefore = await page.getByTestId("progress-value").innerText();
+
+  await otherInput.fill("300");
+  await otherInput.blur();
+  await page.waitForTimeout(400);
+
+  check("清单内输入后数值保留", (await otherInput.inputValue()) === "300");
+  check(
+    "清单内输入会更新该行进度",
+    (await otherRow.locator("span").last().innerText()) !== rowProgressBefore,
+  );
+  check(
+    "清单内输入不影响当前材料（顶部进度不变）",
+    (await page.getByTestId("progress-value").innerText()) === panelBefore,
+  );
+
+  // 还原，避免影响后续断言
+  await otherInput.fill("0");
+  await otherInput.blur();
+  await page.waitForTimeout(300);
+
+  console.log("\n[11] 清除数据");
   page.once("dialog", (dialog) => dialog.accept());
   await page.getByRole("button", { name: "清除" }).click();
   check(
@@ -173,7 +200,7 @@ try {
     (await page.getByTestId("progress-value").innerText()) === "0%",
   );
 
-  console.log("\n[11] 控制台错误");
+  console.log("\n[12] 控制台错误");
   check("无 JS 运行时错误", consoleErrors.length === 0, consoleErrors.join(" | "));
 } finally {
   await browser.close();

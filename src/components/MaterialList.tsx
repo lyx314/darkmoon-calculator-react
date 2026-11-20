@@ -1,19 +1,21 @@
 import { Fragment, useEffect, useRef } from "react";
 
 import { MASCOT_IMAGE, materialImageSrc } from "../domain/materialImage";
+import type { Triplet } from "../domain/types";
 import {
   useCurrentID,
   useDarkmoonActions,
   useListOptions,
   useListRows,
 } from "../store/selectors";
+import { NumberInput } from "./NumberInput";
 import { ProgressBar } from "./ui/ProgressBar";
 
 export function MaterialList() {
   const listRows = useListRows();
   const options = useListOptions();
   const currentID = useCurrentID();
-  const { setListOptions, selectMaterial } = useDarkmoonActions();
+  const { setListOptions, selectMaterial, setNumbersFor } = useDarkmoonActions();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // 用上下箭头切换材料时，把当前行滚到列表可视区中间。
@@ -133,19 +135,30 @@ export function MaterialList() {
           const isCurrent = row.id === currentID;
 
           return (
-            <button
-              type="button"
+            /*
+              整行是一块可点击区域（用来切换材料），但数字格要能直接输入。
+              做法：铺一个绝对定位的按钮承接整行点击，内容层 pointer-events-none，
+              只有输入框重新开启 pointer-events。这样既保留键盘可达的“选择”按钮，
+              又不用把 input 塞进 button 里（那是非法嵌套）。
+            */
+            <div
               key={row.id}
               data-testid="list-row"
               data-current={isCurrent}
               aria-current={isCurrent ? "true" : undefined}
-              onClick={() => selectMaterial(row.id)}
-              className={`mt-[2px] flex w-full cursor-pointer items-center justify-between gap-[6px] rounded-[5px] px-[4px] transition-colors duration-300 hover:bg-c0 ${
+              className={`relative mt-[2px] flex w-full items-center justify-between gap-[6px] rounded-[5px] px-[4px] transition-colors duration-300 hover:bg-c0 ${
                 isCurrent ? "bg-c1" : ""
               } ${row.hidden ? "hidden" : ""}`}
             >
-              {/* 左：三个品阶的图标 + 数量 */}
-              <span className="flex shrink-0 items-center">
+              <button
+                type="button"
+                aria-label={`切换到 ${row.names[2]}`}
+                onClick={() => selectMaterial(row.id)}
+                className="absolute inset-0 cursor-pointer rounded-[5px] focus-visible:ring-2 focus-visible:ring-c6 focus-visible:ring-inset focus-visible:outline-none"
+              />
+
+              {/* 左：三个品阶的图标 + 可输入的数量 */}
+              <span className="pointer-events-none relative flex shrink-0 items-center">
                 {[2, 1, 0].map((index) => (
                   <Fragment key={index}>
                     <img
@@ -157,15 +170,22 @@ export function MaterialList() {
                       decoding="async"
                       className="h-[40px] w-[40px]"
                     />
-                    <span className="w-[35px] text-center text-[11px]">
-                      {row.numbers[index]}
-                    </span>
+                    <NumberInput
+                      value={row.numbers[index]}
+                      ariaLabel={`${row.names[index]} 数量（材料一览）`}
+                      onCommit={(value) => {
+                        const next = [...row.numbers] as Triplet<number>;
+                        next[index] = value;
+                        setNumbersFor(row.id, next);
+                      }}
+                      className="pointer-events-auto mx-[2px] w-[38px] rounded-[4px] border-none bg-transparent py-[2px] text-center text-[11px] text-c9 transition-colors hover:bg-c0 focus:bg-white focus:shadow-[0_0_0_1px_var(--color-6)] focus:outline-none"
+                    />
                   </Fragment>
                 ))}
               </span>
 
               {/* 右：进度条 + 百分比，宽度富余时进度条自动变长 */}
-              <span className="flex min-w-0 flex-1 items-center justify-end gap-[8px]">
+              <span className="pointer-events-none relative flex min-w-0 flex-1 items-center justify-end gap-[8px]">
                 <ProgressBar
                   value={row.progress}
                   size="sm"
@@ -176,7 +196,7 @@ export function MaterialList() {
                   {row.progress}%
                 </span>
               </span>
-            </button>
+            </div>
           );
         })}
       </div>
