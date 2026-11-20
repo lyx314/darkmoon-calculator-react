@@ -11,10 +11,8 @@ import {
   useEnemyStats,
 } from "../store/selectors";
 import { NumberInput } from "./NumberInput";
+import { Select } from "./ui/Select";
 import { iconButton } from "./ui/buttonStyles";
-
-const selectClass =
-  "w-[100px] cursor-pointer rounded-full border-none p-[4px] text-center text-[11px] text-c9 focus:shadow-[0_0_2px_var(--color-9)] focus:outline-none max-sm:w-[80px]";
 
 /** 敌人配置区域：每车材料统计 + 敌人/等级/数量配置行 */
 export function EnemySection() {
@@ -106,33 +104,33 @@ export function EnemySection() {
               className="h-[10px] w-[10px] accent-c9"
             />
 
-            <select
+            <Select
               aria-label="敌人"
               value={row.name}
               onChange={(event) => updateRow(index, { name: event.target.value })}
-              className={selectClass}
+              className="w-[100px] max-sm:w-[80px]"
             >
               {enemyNames.map((name) => (
                 <option key={name} value={name}>
                   {name}
                 </option>
               ))}
-            </select>
+            </Select>
 
-            <select
+            <Select
               aria-label="等级"
               value={row.level}
               onChange={(event) =>
                 updateRow(index, { level: Number(event.target.value) })
               }
-              className={selectClass}
+              className="w-[100px] max-sm:w-[80px]"
             >
               {enemyLevelRanges.map((range, level) => (
                 <option key={range} value={level}>
                   {range}
                 </option>
               ))}
-            </select>
+            </Select>
 
             <NumberInput
               value={row.number}

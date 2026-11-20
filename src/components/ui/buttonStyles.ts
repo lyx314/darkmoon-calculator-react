@@ -22,8 +22,3 @@ export const textButton = {
 export const iconButton =
   "cursor-pointer rounded-full text-c9 transition-transform duration-200 " +
   "hover:scale-110 active:scale-95";
-
-/** 下拉框等「伪按钮」控件，跟文本按钮保持同样的尺寸与圆角 */
-export const selectLike =
-  "h-[24px] cursor-pointer rounded-full border-none bg-c8 px-[10px] " +
-  "text-[10px] font-semibold text-white focus:outline-none";

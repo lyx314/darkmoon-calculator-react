@@ -5,7 +5,8 @@ import {
   useDarkmoonActions,
   useIsWorldLevel9,
 } from "../store/selectors";
-import { selectLike, textButton } from "./ui/buttonStyles";
+import { textButton } from "./ui/buttonStyles";
+import { Select } from "./ui/Select";
 
 export function NavBar() {
   const colorTheme = useColorTheme();
@@ -24,19 +25,20 @@ export function NavBar() {
         清除
       </button>
 
-      <select
+      <Select
         id="color-theme"
         aria-label="配色主题"
+        variant="primary"
         value={colorTheme}
         onChange={(event) => setColorTheme(event.target.value as ColorTheme)}
-        className={`${selectLike} w-[68px]`}
+        className="w-[76px]"
       >
         {COLOR_THEMES.map((theme) => (
           <option key={theme} value={theme}>
             {THEME_LABELS[theme]}
           </option>
         ))}
-      </select>
+      </Select>
 
       <button
         type="button"

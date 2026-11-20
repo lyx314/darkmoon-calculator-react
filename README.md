@@ -70,7 +70,8 @@ src/
 │   ├── NumberInput.tsx     带校验的数量输入框
 │   └── ui/
 │       ├── buttonStyles.ts 全站统一的按钮样式
-│       └── ProgressBar.tsx 进度条（带过渡动画与 aria 语义）
+│       ├── ProgressBar.tsx 进度条（带过渡动画与 aria 语义）
+│       └── Select.tsx      统一样式的下拉框
 ├── App.tsx / main.tsx / index.css
 ```
 
@@ -430,6 +431,15 @@ Windows 上编辑器写临时文件时被文件监视器锁住。`vite.config.ts
   只有下面的面板容器 `flex-1 overflow-y-auto`（滚动条仍隐藏）。
 - 实测 1280×700 下左栏内容滚到 44px，表头 `top` 始终是 44，右侧表头同样是 44；
   1280×900 内容不溢出时左栏不滚动。
+
+### 2026-11-20 · 下拉框统一风格
+
+- 原生 `<select>` 的箭头由系统绘制，和胶囊风格对不上（深色底上是黑箭头，居中文字还被挤偏）。
+- 新增 `components/ui/Select.tsx`：`appearance-none` 去掉原生箭头，叠一个跟随文字颜色的
+  `IoChevronDownOutline`（`pointer-events-none`，点击仍落在 select 上）。
+- 两种形态：`primary`（导航栏，24px 高 / 10px 字，与相邻按钮同尺寸）、
+  `plain`（敌人配置行，白底 11px 字）。
+- 导航栏的下拉宽度从 68px 调到 76px，给自定义箭头留出位置；顺手删掉不再使用的 `selectLike`。
 
 ### 2026-11-20 · 材料一览高亮当前材料
 
