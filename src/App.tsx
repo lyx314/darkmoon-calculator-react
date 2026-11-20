@@ -17,15 +17,17 @@ export default function App() {
   }, [colorTheme]);
 
   return (
-    <>
+    /*
+      应用外壳：宽屏下整页固定为视口高度，页面本身不滚动，
+      左栏和右栏各自内部滚动，互不牵连。
+      窄屏（< 860px）退回普通文档流，仍由页面统一滚动。
+    */
+    <div className="flex min-h-screen flex-col min-[860px]:h-screen min-[860px]:overflow-hidden">
       <NavBar />
 
-      {/*
-        宽屏（>= 860px）左右分栏：左边是录入与统计面板，右边是材料一览。
-        窄屏自动退回单列，顺序仍是「面板 -> 列表」。
-      */}
-      <main className="mx-auto flex max-w-[920px] flex-col gap-[16px] px-[10px] pb-[20px] min-[860px]:flex-row min-[860px]:items-start">
-        <div className="min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0">
+      <main className="mx-auto flex min-h-0 w-full max-w-[920px] flex-col gap-[16px] px-[10px] pb-[20px] min-[860px]:flex-1 min-[860px]:flex-row min-[860px]:pb-[10px]">
+        {/* 左：录入与统计，宽屏下自己滚动 */}
+        <div className="scroll-thin min-w-0 min-[860px]:w-[430px] min-[860px]:shrink-0 min-[860px]:overflow-y-auto min-[860px]:pr-[6px]">
           <div className="flex items-end justify-between">
             <h1 className="my-[10px] mr-[10px] text-[13px] font-semibold">
               DARKMOON CALCULATOR
@@ -42,10 +44,11 @@ export default function App() {
           <CraftSection />
         </div>
 
-        <aside className="min-w-0 min-[860px]:sticky min-[860px]:top-0 min-[860px]:h-[calc(100vh-10px)] min-[860px]:flex-1">
+        {/* 右：材料一览，宽屏下自己滚动 */}
+        <aside className="min-h-0 min-w-0 min-[860px]:flex-1">
           <MaterialList />
         </aside>
       </main>
-    </>
+    </div>
   );
 }

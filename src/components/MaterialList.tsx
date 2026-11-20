@@ -127,7 +127,7 @@ export function MaterialList() {
       {/* 宽屏下这一栏自己滚动，标题与选项保持可见 */}
       <div
         ref={scrollRef}
-        className="scroll-thin flex flex-col bg-white min-[860px]:min-h-0 min-[860px]:flex-1 min-[860px]:overflow-y-auto min-[860px]:pr-[2px]"
+        className="scroll-thin flex flex-col bg-white min-[860px]:min-h-0 min-[860px]:flex-1 min-[860px]:overflow-y-auto min-[860px]:pr-[2px] min-[860px]:pb-[10px]"
       >
         {listRows.map((row) => {
           const isCurrent = row.id === currentID;

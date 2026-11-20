@@ -19,7 +19,7 @@ export function NavBar() {
   };
 
   return (
-    <nav className="mx-auto flex max-w-[920px] items-center gap-[5px] px-[10px] py-[10px] text-[13px] font-semibold">
+    <nav className="mx-auto flex w-full max-w-[920px] shrink-0 items-center gap-[5px] px-[10px] py-[10px] text-[13px] font-semibold">
       <button type="button" className={textButton.primary} onClick={handleClear}>
         清除
       </button>
